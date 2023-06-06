@@ -1,11 +1,15 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
+import axiosClient from '../axios-client.js'
+import { useStateContext } from '../contexts/ContextProvider'
 
 export default function Signup () {
   const nameRef = useRef()
   const emailRef = useRef()
   const passwordRef = useRef()
   const passwordConfirmationRef = useRef()
+
+  const { setUser, setToken } = useStateContext()
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -16,7 +20,17 @@ export default function Signup () {
       password_confirmation: passwordConfirmationRef.current.value
     }
 
-    console.log({ payload })
+    axiosClient.post('/signup', payload)
+      .then(({ data }) => {
+        setUser(data.user)
+        setToken(data.token)
+      })
+      .catch(err => {
+        const response = err.response
+        if (response && response.status === 422) {
+          console.error(response.data.errors)
+        }
+      })
   }
 
   return (
