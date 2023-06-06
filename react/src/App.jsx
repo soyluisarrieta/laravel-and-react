@@ -1,9 +1,8 @@
-
-function App() {
-
+function App () {
+  console.log('hola mundo')
   return (
     <>
-     App
+      App
     </>
   )
 }
