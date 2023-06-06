@@ -7,6 +7,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\SignupRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -14,6 +15,7 @@ class AuthController extends Controller
   public function signup(SignupRequest $request)
   {
     $data = $request->validated();
+
     /** @var \App\Models\User $user */
     $user = User::create([
       'name' => $data['name'],
@@ -22,12 +24,22 @@ class AuthController extends Controller
     ]);
 
     $token = $user->createToken('main')->plainTextToken;
-
     return response(compact('user', 'token'));
   }
 
   public function login(LoginRequest $request)
   {
+    $credentials = $request->validated();
+    if (Auth::attempt($credentials)) {
+      return response([
+        'message' => 'Provided email address or password is incorrect'
+      ]);
+    }
+
+    /** @var User $user */
+    $user = Auth::user();
+    $token = $user->createToken('main')->plainTextToken;
+    return response(compact('user', 'token'));
   }
 
   public function logout(Request $request)
