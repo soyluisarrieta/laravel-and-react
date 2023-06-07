@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import axiosClient from '../axios-client.js'
+import { Link } from 'react-router-dom'
 
 export default function Users () {
   const [users, setUsers] = useState([])
@@ -23,6 +24,7 @@ export default function Users () {
   return (
     <>
       <h1>Users</h1>
+      <Link to='/users/new'>Add new</Link>
     </>
   )
 }
