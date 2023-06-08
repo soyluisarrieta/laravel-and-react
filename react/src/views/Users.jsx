@@ -21,8 +21,19 @@ export default function Users () {
       })
   }
 
-  const handleDelete = () => {
+  const handleDelete = (id) => {
+    if (!window.confirm('Are you sure you want to delete this user?')) {
+      return
+    }
 
+    axiosClient.delete(`/users/${id}`)
+      .then(() => {
+        // TODO: show notification
+        getUsers()
+      })
+      .catch(() => {
+
+      })
   }
 
   return (
@@ -51,7 +62,7 @@ export default function Users () {
                 <td>{createAt}</td>
                 <td>
                   <Link to={`/users/${id}`} className='btn-edit' style={{ marginRight: 3 }}>Edit</Link>
-                  <button onClick={handleDelete} className='btn-delete'>Delete</button>
+                  <button onClick={() => handleDelete(id)} className='btn-delete'>Delete</button>
                 </td>
               </tr>
             ))}
