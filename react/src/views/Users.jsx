@@ -23,9 +23,9 @@ export default function Users () {
 
   return (
     <div>
-      <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1>Users</h1>
-        <Link to='/users/new'>Add new</Link>
+        <Link to='/users/new' className='btn-add'>Add new</Link>
       </div>
     </div>
   )
