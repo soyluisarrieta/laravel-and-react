@@ -22,9 +22,11 @@ export default function Users () {
   }
 
   return (
-    <>
-      <h1>Users</h1>
-      <Link to='/users/new'>Add new</Link>
-    </>
+    <div>
+      <div>
+        <h1>Users</h1>
+        <Link to='/users/new'>Add new</Link>
+      </div>
+    </div>
   )
 }

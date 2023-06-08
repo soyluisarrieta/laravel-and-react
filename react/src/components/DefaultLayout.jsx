@@ -43,10 +43,11 @@ export default function DefaultLayout () {
             {user.name}
             <a href='#' onClick={onLogout} className='btn-logout'>Logout</a>
           </div>
-          <main>
-            <Outlet />
-          </main>
         </header>
+
+        <main>
+          <Outlet />
+        </main>
       </div>
     </div>
   )
