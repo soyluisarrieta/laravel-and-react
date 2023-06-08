@@ -14,7 +14,7 @@ export default function Users () {
     axiosClient.get('/users')
       .then(({ data }) => {
         setLoading(true)
-        console.log({ data })
+        setUsers(data.data)
       })
       .catch(() => {
         setLoading(false)
@@ -50,7 +50,7 @@ export default function Users () {
                 <td>{email}</td>
                 <td>{createAt}</td>
                 <td>
-                  <Link to={`/users/${id}`}>Edit</Link>
+                  <Link to={`/users/${id}`} className='btn-edit' style={{ marginRight: 3 }}>Edit</Link>
                   <button onClick={handleDelete} className='btn-delete'>Delete</button>
                 </td>
               </tr>
