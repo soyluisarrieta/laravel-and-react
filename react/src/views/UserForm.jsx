@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import axiosClient from '../axios-client.js'
 
 export default function UserForm () {
-  const { id } = useParams()
+  const navigate = useNavigate()
+  const { id: paramId } = useParams()
+
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState(false)
   const [user, setUser] = useState({
@@ -15,10 +17,10 @@ export default function UserForm () {
   })
 
   useEffect(() => {
-    if (!id) return
+    if (!paramId) return
 
     setLoading(true)
-    axiosClient.get(`/users/${id}`)
+    axiosClient.get(`/users/${paramId}`)
       .then(({ data }) => {
         setUser(data)
       })
@@ -29,6 +31,31 @@ export default function UserForm () {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    if (user.id) {
+      axiosClient.put(`/users/${user.id}`, user)
+        .then(() => {
+          // TODO: show notification
+          navigate('/users')
+        })
+        .catch(err => {
+          const response = err.response
+          if (response && response.status === 422) {
+            setErrors(response.data.errors)
+          }
+        })
+    } else {
+      axiosClient.post('/users', user)
+        .then(() => {
+          // TODO: show notification
+          navigate('/users')
+        })
+        .catch(err => {
+          const response = err.response
+          if (response && response.status === 422) {
+            setErrors(response.data.errors)
+          }
+        })
+    }
   }
 
   return (
@@ -38,6 +65,7 @@ export default function UserForm () {
           ? `Update User: ${user.name}`
           : 'New User'}
       </h1>
+
       <div className='card animated fadeInDown'>
         {loading && (
           <div className='text-center'>Loading...</div>
