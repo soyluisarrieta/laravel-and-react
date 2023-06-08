@@ -11,12 +11,12 @@ export default function Users () {
   }, [])
 
   const getUsers = () => {
+    setLoading(true)
     axiosClient.get('/users')
       .then(({ data }) => {
-        setLoading(true)
         setUsers(data.data)
       })
-      .catch(() => {
+      .finally(() => {
         setLoading(false)
       })
   }
@@ -53,20 +53,33 @@ export default function Users () {
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {users.map(({ id, name, email, created_at: createAt }) => (
-              <tr key={id}>
-                <td>{id}</td>
-                <td>{name}</td>
-                <td>{email}</td>
-                <td>{createAt}</td>
-                <td>
-                  <Link to={`/users/${id}`} className='btn-edit' style={{ marginRight: 3 }}>Edit</Link>
-                  <button onClick={() => handleDelete(id)} className='btn-delete'>Delete</button>
+
+          {loading && (
+            <tbody>
+              <tr>
+                <td colSpan='5' className='text-center'>
+                  Loading...
                 </td>
               </tr>
-            ))}
-          </tbody>
+            </tbody>
+          )}
+
+          {!loading && (
+            <tbody>
+              {users.map(({ id, name, email, created_at: createAt }) => (
+                <tr key={id}>
+                  <td>{id}</td>
+                  <td>{name}</td>
+                  <td>{email}</td>
+                  <td>{createAt}</td>
+                  <td>
+                    <Link to={`/users/${id}`} className='btn-edit' style={{ marginRight: 3 }}>Edit</Link>
+                    <button onClick={() => handleDelete(id)} className='btn-delete'>Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          )}
         </table>
       </div>
     </div>
